@@ -35,14 +35,14 @@ namespace BRCA_API.Controllers
         [HttpDelete("Eliminar")]
         public string EliminarMovimiento(int Id)
         {
-            if (Id <= 0) return "false";
+            if (Id <= 0) return "Valor Invalido";
 
             if (_context.Movimientos != null && _context.Movimientos.Count() > 0)
             {
-                Movimientos user = _context.Movimientos.Where(u => u.Id == Id).First();
-                if (user != null)
+                Movimientos? Selected = _context.Movimientos.Where(u => u.Id == Id).FirstOrDefault();
+                if (Selected != null)
                 {
-                    _context.Remove(user);
+                    _context.Remove(Selected);
                     _context.SaveChanges();
 
                     HttpContext.Response.StatusCode = 200;
@@ -50,12 +50,12 @@ namespace BRCA_API.Controllers
                 }
 
                 HttpContext.Response.StatusCode = 500;
-                return "User not found";
+                return "Movimiento de Cuenta No Encontrado";
             }
             else
             {
                 HttpContext.Response.StatusCode = 500;
-                return "Empty " + this.GetType().Name + " list";
+                return "Lista " + this.GetType().Name + " Vacia";
             }
         }
 
